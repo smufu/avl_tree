@@ -22,6 +22,14 @@ public:
 	bool hasLeft();
 	bool hasRight();
 	unsigned int getHeight();
+	/**
+	 * @brief compares hights and calulates balance
+	 * @details return 0 if left height eqauls right height
+	 *  and -1 if left tree is deeper
+	 *  or 1 if right one is deeper 
+	 * @return returns -1, 0 or 1
+	 */
+	int getBalance();
 };
 class Cursor;
 class Baum: virtual public Plotable {

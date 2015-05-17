@@ -232,3 +232,16 @@ unsigned int Node::getHeight() {
 	else
 		return h_right+1;
 }
+int Node::getBalance() {
+	int h_left = 0;
+	int h_right = 0;
+	if(hasLeft())
+		h_left = left->getHeight()+1;
+	if(hasRight())
+		h_right = right->getHeight()+1;
+	if(h_left > h_right)
+		return -1;
+	else if(h_left < h_right)
+		return 1;
+	else return 0;
+}
