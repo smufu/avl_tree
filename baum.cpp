@@ -43,12 +43,6 @@ void Baum::remove(int data) {
 	bool dir_left = true;
 	while(true) {
 		if(*n == data) {
-			rotate(n,true);
-			if(dir_left)
-				prev->setLeft(n);
-			else
-				prev->setRight(n);
-			return;
 			cout << "deleting " << *n << " prev is " << *prev << endl;
 			Node* bkup_left = n->getLeft();
 			Node* bkup_right = n->getRight();
