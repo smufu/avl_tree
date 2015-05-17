@@ -43,6 +43,12 @@ void Baum::remove(int data) {
 	bool dir_left = true;
 	while(true) {
 		if(*n == data) {
+			rotate(n,true);
+			if(dir_left)
+				prev->setLeft(n);
+			else
+				prev->setRight(n);
+			return;
 			cout << "deleting " << *n << " prev is " << *prev << endl;
 			Node* bkup_left = n->getLeft();
 			Node* bkup_right = n->getRight();
@@ -135,6 +141,24 @@ bool Baum::contains(int data) {
 				return false;
 		}	
 	}
+}
+void Baum::rotate(Node*& n, bool dir_left) {
+	Node* bkup = nullptr;
+	Node* child = nullptr;
+	if(dir_left) {
+		child = n->getRight();
+		if(child->hasLeft())
+			bkup = child->getLeft();
+		child->setLeft(n);
+		n->setRight(bkup);
+	} else {
+		child = n->getLeft();
+		if(child->hasRight())
+			bkup = child->getRight();
+		child->setRight(n);
+		n->setLeft(bkup);
+	}
+	n = child;
 }
 /*
 Cursor Baum::get(int) {
