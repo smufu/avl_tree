@@ -35,6 +35,18 @@ int main(int argc, char const *argv[])
 	w.writeDot(ofdot);
 	system("dot -Tpng tree.dot -o tree.png");
 	cout << "image written (tree.png)" << endl;
+	while(true) {
+		int d=0;
+		cout << "remove [-1:=abort] ?= ";
+		cin >> d;
+		if(d==-1)break;
+		b.remove(d);
+		w.dump();
+	}
+	ofstream ofdot("tree_final.dot");
+	w.writeDot(ofdot);
+	system("dot -Tpng tree_final.dot -o tree_final.png");
+	cout << "image written (tree_final.png)" << endl;
 	//system("ristretto tree.png 2>/dev/null");
 
 	return 0;
