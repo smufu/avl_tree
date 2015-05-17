@@ -46,19 +46,26 @@ void Baum::remove(int data) {
 			cout << "deleting " << *n << " prev is " << *prev << endl;
 			Node* bkup_left = n->getLeft();
 			Node* bkup_right = n->getRight();
-			Node* bkp = nullptr;
 			n->disconnect();
 			delete n;
 			n = nullptr;
+
+			// previous node should not point to n anymore
+			if(dir_left)
+				prev->setLeft(nullptr);
+			else
+				prev->setRight(nullptr);
 			cout << "node was deleted" << endl;
 
 			unsigned int height_left = 0;
 			unsigned int height_right = 0;
 			
+			// +1 because if the node even exists but is empty
+			// this shoud be better if it is null
 			if(bkup_left != nullptr)
-				height_left = bkup_left->getHeight();
+				height_left = bkup_left->getHeight()+1;
 			if(bkup_right != nullptr)
-				height_right = bkup_right->getHeight();
+				height_right = bkup_right->getHeight()+1;
 			
 			if(bkup_right == nullptr && bkup_left == nullptr)
 				return;
@@ -66,49 +73,31 @@ void Baum::remove(int data) {
 			if(height_left <= height_right) {
 				cout << "right tree is deeper searching for smallest item" << endl;
 				Node* min = bkup_right;
-				Node* m_prev = prev;
-
+				
 				// minimum finden
 				while(min->hasLeft()) {
-					m_prev = min;
-					//dir_left = true;
 					min = min->getLeft();
 				}
-
-				bkp = min->getRight();
-				m_prev->setLeft(nullptr);
-				min->disconnect();
-				cout << "deleted node is now smallest item of right tree" << endl;
-				n = min;
+				cout << "minimum is " << *min << endl;
+				min->setLeft(bkup_left);
+				cout << "deleted node is now right sub tree" << endl;
+				n = bkup_right;
 			} else {
 				cout << "left tree is deeper searching for biggest item" << endl;
 				Node* max = bkup_left;
-				Node* m_prev = prev;
-
+				
 				// maximum finden
 				while(max->hasRight()) {
-					m_prev = max;
-					//dir_left = false;
 					max = max->getRight();
 				}
-				
-				bkp = max->getLeft();
-				m_prev->setRight(nullptr);
-				max->disconnect();
-				cout << "deleted node is now biggest item of left tree" << endl;
-				n = max;
+				cout << "maximum is " << *max << endl;
+				//bkup_right->disconnect(); // ONLY FOR DEBUG!!!
+				max->setRight(bkup_right);
+				cout << "deleted node is now left sub tree" << endl;
+				n = bkup_left;
+				cout << "# n is " << *n << " n->l is " << (n->hasLeft()?(int)(*n->getLeft()):-1) <<
+				 " n->r is " << (n->hasRight()?(int)(*n->getRight()):-1) << endl;
 			}
-			/*if(dir_left)
-				prev->setLeft(bkp);
-			else
-				prev->setRight(bkp);
-			*/
-			cout << "setting children of the node who replaces the deleted one" << endl;
-			n->setLeft(bkup_left);
-			cout << "left child is old left tree" << endl;
-			n->setRight(bkup_right);
-			cout << "right child is old right tree" << endl;
-			cout << "setting link in parent node to current node" << endl;
 			if(dir_left)
 				prev->setLeft(n);
 			else
