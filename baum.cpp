@@ -11,6 +11,37 @@ Baum::Baum() {
 Baum::~Baum() {
 	delete root;
 }
+void Baum::rotate(int at, bool left) {
+	Node* n = root->getLeft();
+	Node* prev = root;
+	bool dir_left = true;
+	while(true) {
+		if(at == *n) {
+			Node* to_rotate = nullptr;
+			if(dir_left)
+				to_rotate = prev->getLeft();
+			else
+				to_rotate = prev->getRight();
+			rotate(to_rotate, left);
+			if(dir_left)
+				prev->setLeft(to_rotate);
+			else
+				prev->setRight(to_rotate);
+			return;
+		}
+		else if(at < *n) {
+			prev = n;
+			n = n->getLeft();
+			dir_left = true;
+		} else {
+			prev = n;
+			n = n->getRight();
+			dir_left = false;
+		}
+		if(n == nullptr)
+			throw logic_error("can't rotate non existend value");
+	}
+}
 void Baum::insert(int data) {
 	if(!root->hasLeft()) {
 		root->setLeft(new Node(data));

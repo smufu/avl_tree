@@ -53,6 +53,7 @@ public:
 	 */
 	bool contains(int i);
 	//Cursor get(int);
+	void rotate(int at, bool left);
 	virtual void* getRootNode();
 	virtual string getNodeName(void*);
 	virtual string getNodeValue(void*);

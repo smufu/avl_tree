@@ -43,6 +43,17 @@ int main(int argc, char const *argv[])
 		b.remove(d);
 		w.dump();
 	}
+	while(true) {
+		int d=0;
+		int dir=0;
+		cout << "rotate [-1:=abort] ?= ";
+		cin >> d;
+		if(d==-1)break;
+		cout << "direction [1:=left, 0:=right] ?= ";
+		cin >> dir;
+		b.rotate(d,dir);
+		w.dump();
+	}
 	ofstream ofdot2("tree_final.dot");
 	w.writeDot(ofdot2);
 	system("dot -Tpng tree_final.dot -o tree_final.png");
