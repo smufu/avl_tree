@@ -75,7 +75,7 @@ void Baum::insert(int data) {
 		path.pop_back();
 		Node* prev = path.back();
 		Node* to_rotate = nullptr;
-		if(*n < *prev)
+		if(*n < *prev || prev == root)
 			to_rotate = prev->getLeft();
 		else
 			to_rotate = prev->getRight();
@@ -83,15 +83,19 @@ void Baum::insert(int data) {
 		cout << "-> Knoten " << *n << " ist " << b << endl;
 		if(b < -1 || b > 1) {
 			cout << "-> Knoten " << *n << " ist unausgegelichen" << endl;
+			if(to_rotate == nullptr)
+				cout << "-> to rotate is null" << endl;
 			if(b < 0) {
 				cout << "-> Knoten " << *n << " muss rechts rotiert werden" << endl;
+				cout << "-> rotiere " << *to_rotate << endl;
 				rotate(to_rotate, false);
 			} else {
 				cout << "-> Knoten " << *n << " muss links rotiert werden" << endl;
-				rotate(to_rotate, false);
+				cout << "-> rotiere " << *to_rotate << endl;
+				rotate(to_rotate, true);
 			}
 			cout << "-> rotiert" << endl;
-			if(*n < *prev)
+			if(*n < *prev || prev == root)
 				prev->setLeft(to_rotate);
 			else
 				prev->setRight(to_rotate);
