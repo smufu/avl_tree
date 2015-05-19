@@ -48,22 +48,54 @@ void Baum::insert(int data) {
 		return;
 	}
 	Node* n = root->getLeft();
+	vector<Node*> path;
+	path.push_back(root);
+	path.push_back(n);
 	while(true) {
 		if(data < *n) {
 			if(n->hasLeft())
 				n = n->getLeft();
 			else {
 				n->setLeft(new Node(data));
-				return;
+				break;
 			}
 		} else if(data > *n) {
 			if(n->hasRight())
 				n = n->getRight();
 			else {
 				n->setRight(new Node(data));
-				return;
+				break;
 			}
 		} else throw logic_error("value musst be unique");
+		path.push_back(n);
+	}
+	cout << "-> gehe weg den ich gekommen bin zurück" << endl;
+	while(path.size()>1) {
+		Node* n = path.back();
+		path.pop_back();
+		Node* prev = path.back();
+		Node* to_rotate = nullptr;
+		if(*n < *prev)
+			to_rotate = prev->getLeft();
+		else
+			to_rotate = prev->getRight();
+		int b = n->getBalance();
+		cout << "-> Knoten " << *n << " ist " << b << endl;
+		if(b < -1 || b > 1) {
+			cout << "-> Knoten " << *n << " ist unausgegelichen" << endl;
+			if(b < 0) {
+				cout << "-> Knoten " << *n << " muss rechts rotiert werden" << endl;
+				rotate(to_rotate, false);
+			} else {
+				cout << "-> Knoten " << *n << " muss links rotiert werden" << endl;
+				rotate(to_rotate, false);
+			}
+			cout << "-> rotiert" << endl;
+			if(*n < *prev)
+				prev->setLeft(to_rotate);
+			else
+				prev->setRight(to_rotate);
+		}
 	}
 }
 void Baum::remove(int data) {
@@ -270,6 +302,7 @@ int Node::getBalance() {
 		h_left = left->getHeight()+1;
 	if(hasRight())
 		h_right = right->getHeight()+1;
+	return h_right - h_left;
 	if(h_left > h_right)
 		return -1;
 	else if(h_left < h_right)
