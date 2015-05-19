@@ -11,6 +11,33 @@ Baum::Baum() {
 Baum::~Baum() {
 	delete root;
 }
+void Baum::balance(vector<Node*> v) {
+	while(v.size()>1) {
+		Node* n = v.back();
+		v.pop_back();
+		Node* prev = v.back();
+		int b = n->getBalance();
+		if(b < -1 || b > 1) {
+			cout << "-> Knoten " << *n << " ist unausgegelichen" << endl;
+			if(n == nullptr)
+				cout << "-> to rotate is null" << endl;
+			if(b < 0) {
+				cout << "-> Knoten " << *n << " muss rechts rotiert werden" << endl;
+				cout << "-> rotiere " << *n << endl;
+				rotate(n, false);
+			} else {
+				cout << "-> Knoten " << *n << " muss links rotiert werden" << endl;
+				cout << "-> rotiere " << *n << endl;
+				rotate(n, true);
+			}
+			cout << "-> rotiert" << endl;
+			if(*n < *prev || prev == root)
+				prev->setLeft(n);
+			else
+				prev->setRight(n);
+		}
+	}
+}
 void Baum::rotate(int at, bool left) {
 	Node* n = root->getLeft();
 	Node* prev = root;
@@ -69,38 +96,7 @@ void Baum::insert(int data) {
 		} else throw logic_error("value musst be unique");
 		path.push_back(n);
 	}
-	cout << "-> gehe weg den ich gekommen bin zurück" << endl;
-	while(path.size()>1) {
-		Node* n = path.back();
-		path.pop_back();
-		Node* prev = path.back();
-		Node* to_rotate = nullptr;
-		if(*n < *prev || prev == root)
-			to_rotate = prev->getLeft();
-		else
-			to_rotate = prev->getRight();
-		int b = n->getBalance();
-		cout << "-> Knoten " << *n << " ist " << b << endl;
-		if(b < -1 || b > 1) {
-			cout << "-> Knoten " << *n << " ist unausgegelichen" << endl;
-			if(to_rotate == nullptr)
-				cout << "-> to rotate is null" << endl;
-			if(b < 0) {
-				cout << "-> Knoten " << *n << " muss rechts rotiert werden" << endl;
-				cout << "-> rotiere " << *to_rotate << endl;
-				rotate(to_rotate, false);
-			} else {
-				cout << "-> Knoten " << *n << " muss links rotiert werden" << endl;
-				cout << "-> rotiere " << *to_rotate << endl;
-				rotate(to_rotate, true);
-			}
-			cout << "-> rotiert" << endl;
-			if(*n < *prev || prev == root)
-				prev->setLeft(to_rotate);
-			else
-				prev->setRight(to_rotate);
-		}
-	}
+	balance(path);
 }
 void Baum::remove(int data) {
 	if(!root->hasLeft())

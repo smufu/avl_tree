@@ -36,6 +36,7 @@ class Baum: virtual public Plotable {
 private:
 	Node* root;
 	void rotate(Node*&, bool left);
+	void balance(vector<Node*> v);
 public:
 	Baum();  // non virtual sp don't extend this class!
 	~Baum(); // non virtual so don't extend this class!
